@@ -11,6 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Yarn CLI
+        uses: CultureHQ/actions-yarn@v1.0.1
+      - name: Install Deps
+        run: yarn
+      - name: Build
+        run: yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
