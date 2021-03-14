@@ -1,0 +1,15 @@
+{
+	"singleQuote": true,
+	"trailingComma": "es5",
+	"arrowParens": "avoid",
+	"proseWrap": "preserve",
+	"overrides": [
+		{
+			"files": "package.json",
+			"options": {
+				"tabWidth": 2,
+				"useTabs": false
+			}
+		}
+	]
+}

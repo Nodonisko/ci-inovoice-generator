@@ -1,8 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
+import App from './components/App';
 import reportWebVitals from './reportWebVitals';
+import './index.css';
+
+var moment = require('moment');
+var momentDurationFormatSetup = require('moment-duration-format');
+
+momentDurationFormatSetup(moment);
 
 ReactDOM.render(
   <React.StrictMode>
