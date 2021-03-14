@@ -11,6 +11,7 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { fetchTimesheet } from '../features/timesheet';
 import { Actions } from './Actions';
 import { DatePicker, dateState } from './DatePicker';
+import { hasTrackerTokenState } from './SettingsModal';
 import { timesheetState } from './Timesheet';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -33,6 +34,8 @@ const useStyles = makeStyles((theme: Theme) =>
 export const TimesheetGeneratorForm = () => {
   const date = useRecoilValue(dateState);
   const setTimesheet = useSetRecoilState(timesheetState);
+  const hasTrackerToken = useRecoilValue(hasTrackerTokenState);
+
   const [loading, setLoading] = useState(false);
   const classes = useStyles();
 
@@ -63,7 +66,7 @@ export const TimesheetGeneratorForm = () => {
                   variant="contained"
                   color="primary"
                   onClick={handleGenerateTimesheetClick}
-                  disabled={loading}
+                  disabled={loading || !hasTrackerToken}
                   className={classes.submit}
                 >
                   Get timesheet

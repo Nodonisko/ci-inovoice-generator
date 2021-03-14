@@ -6,7 +6,10 @@ import React, { useCallback } from 'react';
 import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 import { generateSendTimesheetEmail } from '../features/mail';
-import { settingsModalVisibleState, trackerTokenState } from './SettingsModal';
+import {
+  hasTrackerTokenState,
+  settingsModalVisibleState,
+} from './SettingsModal';
 import { timesheetMetaState } from './Timesheet';
 
 const useStyles = makeStyles(theme => ({
@@ -17,16 +20,15 @@ const useStyles = makeStyles(theme => ({
 
 export const Actions = () => {
   const { totalLength, timesheetDate } = useRecoilValue(timesheetMetaState);
-  const trackerToken = useRecoilValue(trackerTokenState);
+  const hasTrackerToken = useRecoilValue(hasTrackerTokenState);
   const setSettingsModalVisibility = useSetRecoilState(
     settingsModalVisibleState
   );
   const classes = useStyles();
 
   const timesheetMailLink = generateSendTimesheetEmail(timesheetDate);
-  const isTrackerTokenSet = trackerToken && trackerToken.length > 0;
   const isTimesheetGenerated =
-    !isTrackerTokenSet || (totalLength && totalLength > 0);
+    !hasTrackerToken || (totalLength && totalLength > 0);
 
   const handlePrint = useCallback(event => {
     event.preventDefault();
@@ -42,7 +44,7 @@ export const Actions = () => {
 
   return (
     <Typography variant="h6">
-      {!isTrackerTokenSet ? (
+      {!hasTrackerToken ? (
         <Box py={3} px={3}>
           <Typography variant="h5">
             Please set 7Pace tracker token in{' '}
@@ -53,7 +55,7 @@ export const Actions = () => {
         </Box>
       ) : (
         <ol style={{ margin: 0 }}>
-          <li className={!isTrackerTokenSet ? classes.disabled : ''}>
+          <li className={!hasTrackerToken ? classes.disabled : ''}>
             Select month and generate timesheet.
           </li>
           <li className={!isTimesheetGenerated ? classes.disabled : ''}>

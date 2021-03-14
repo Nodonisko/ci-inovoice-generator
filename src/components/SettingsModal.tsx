@@ -9,7 +9,7 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import React, { useCallback } from 'react';
-import { atom, useRecoilState } from 'recoil';
+import { atom, selector, useRecoilState } from 'recoil';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme: Theme) =>
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
       borderRadius: 5,
-      width: 500,
+      width: 550,
     },
     input: {
       width: '100%',
@@ -47,6 +47,16 @@ export const trackerTokenState = atom({
       });
     },
   ],
+});
+
+export const hasTrackerTokenState = selector({
+  key: 'hasTrackerToken',
+  get: ({ get }) => {
+    const token = get(trackerTokenState);
+    const hasToken = token && token.length > 0;
+
+    return !!hasToken;
+  },
 });
 
 export const SettingsModal = () => {
@@ -91,7 +101,7 @@ export const SettingsModal = () => {
             </Grid>
           </Grid>
 
-          <Box>
+          <Box mt={1}>
             <TextField
               label="7Pace access token"
               className={classes.input}
@@ -103,7 +113,8 @@ export const SettingsModal = () => {
 
           <Box mt={4}>
             <Typography variant="caption">
-              Don't worry everything is saved in local storage only.
+              Don't worry about your secrets, everything is saved in local
+              storage only.
             </Typography>
           </Box>
         </div>
