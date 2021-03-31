@@ -1,4 +1,5 @@
 import moment from 'moment';
+import { prop, sortBy } from 'ramda';
 import { trackerTokenKey } from '../components/SettingsModal';
 
 // regenerate after deleting from git
@@ -36,7 +37,11 @@ export const fetchTimesheet = async (date: { month: number; year: number }) => {
   const fromTimestamp = moment(date).startOf('month').toISOString();
   const toTimestamp = moment(date).endOf('month').toISOString();
   const monthWorklogsIds = await fetch(
-    createUrl('worklogs', { fromTimestamp, toTimestamp }),
+    createUrl('worklogs', {
+      fromTimestamp,
+      toTimestamp,
+      expand: 'user.displayName',
+    }),
     {
       method: 'GET',
       headers: getHeaders(),
@@ -44,7 +49,7 @@ export const fetchTimesheet = async (date: { month: number; year: number }) => {
   )
     .then(response => response.json())
     .then(json => json.data.map(({ id }: any) => id));
-
+  console.log(monthWorklogsIds);
   const timesheet = fetch(`${apiRootUrl}/odata/v3.0/workLogsWorkItems`, {
     method: 'GET',
     headers: getHeaders(),
@@ -52,7 +57,8 @@ export const fetchTimesheet = async (date: { month: number; year: number }) => {
     .then(response => response.json())
     .then(json =>
       json.value.filter(({ Id }: any) => monthWorklogsIds.includes(Id))
-    );
+    )
+    .then(sortBy(prop('Timestamp'))) as any;
 
   return timesheet;
 };
