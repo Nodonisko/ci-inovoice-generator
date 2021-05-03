@@ -18,7 +18,7 @@ export const generateEmailLink = ({
 
 export const generateSendTimesheetEmail = (timesheetDate: string) => {
   const to = 's.pakandlova@creditinfo.com';
-  const cc = 'v.cohen@creditinfo.com';
+  const cc = 'v.cohen@creditinfo.com;al.polacek@gmail.com';
   const subject = `Timesheet ${timesheetDate}`;
   const body = `Hi, sending ${timesheetDate} timesheet for approval in attachment. Thanks.`;
 
