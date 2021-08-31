@@ -16,9 +16,11 @@ export const generateEmailLink = ({
   return mailtoLink;
 };
 
+const separator = window?.navigator?.platform?.includes('Mac') ? ',' : ';';
+
 export const generateSendTimesheetEmail = (timesheetDate: string) => {
   const to = 's.pakandlova@creditinfo.com';
-  const cc = 'v.cohen@creditinfo.com;al.polacek@gmail.com';
+  const cc = `v.cohen@creditinfo.com${separator}al.polacek@gmail.com`;
   const subject = `Timesheet ${timesheetDate}`;
   const body = `Hi, sending ${timesheetDate} timesheet for approval in attachment. Thanks.`;
 

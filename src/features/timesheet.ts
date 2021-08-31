@@ -36,29 +36,19 @@ export const fetchUserInfo = () => {
 export const fetchTimesheet = async (date: { month: number; year: number }) => {
   const fromTimestamp = moment(date).startOf('month').toISOString();
   const toTimestamp = moment(date).endOf('month').toISOString();
-  const monthWorklogsIds = await fetch(
-    createUrl('worklogs', {
-      fromTimestamp,
-      toTimestamp,
-      expand: 'user.displayName',
-    }),
+
+  const timesheet = (await fetch(
+    `${apiRootUrl}/odata/v3.0/workLogsWorkItems/?$filter=Timestamp ge ${fromTimestamp} and Timestamp lt ${toTimestamp}`,
     {
       method: 'GET',
       headers: getHeaders(),
     }
   )
     .then(response => response.json())
-    .then(json => json.data.map(({ id }: any) => id));
-  console.log(monthWorklogsIds);
-  const timesheet = fetch(`${apiRootUrl}/odata/v3.0/workLogsWorkItems`, {
-    method: 'GET',
-    headers: getHeaders(),
-  })
-    .then(response => response.json())
-    .then(json =>
-      json.value.filter(({ Id }: any) => monthWorklogsIds.includes(Id))
-    )
-    .then(sortBy(prop('Timestamp'))) as any;
+    .then(prop('value'))
+    .then((sortBy as any)(prop('Timestamp')))) as any;
+
+  console.log(timesheet);
 
   return timesheet;
 };
